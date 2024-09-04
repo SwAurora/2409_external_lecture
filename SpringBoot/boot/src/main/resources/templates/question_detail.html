@@ -12,6 +12,11 @@
 			</div>
 		</div>
 	</div>
+	<!-- 질문 삭제 -->
+	<form th:action="@{|/question/delete|}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+		<input type="hidden" name="id" th:value="${question.id}">
+		<input type="submit" value="질문 삭제" class="btn btn-danger my-0">
+	</form>
 	<!-- 답변의 갯수 표시 -->
 	<h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
 	<!-- 답변 반복 시작 -->

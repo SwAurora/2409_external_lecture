@@ -49,4 +49,10 @@ public class QuestionController {
 		this.questionService.create(questionForm.getSubject(), questionForm.getContent());
 		return "redirect:/question/list";
 	}
+	
+	@PostMapping("/delete")
+	public String questionDelete(@RequestParam("id") Integer id) {
+		this.questionService.delete(id);
+		return "redirect:/question/list";
+	}
 }
