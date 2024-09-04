@@ -18,13 +18,19 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+				.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).hasAuthority("ROLE_ADMIN")
 				.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
 				.csrf((csrf) -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
 				.headers((headers) -> headers.addHeaderWriter(
 						new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
 				.formLogin((formLogin) -> formLogin.loginPage("/user/login").defaultSuccessUrl("/"))
 				.logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-						.logoutSuccessUrl("/").invalidateHttpSession(true));
+						.logoutSuccessUrl("/").invalidateHttpSession(true))
+				.exceptionHandling((exceptions) -> exceptions
+			            .accessDeniedHandler((request, response, accessDeniedException) -> {
+			                response.sendRedirect("/");
+			            })
+			    );
 		return http.build();
 	}
 
